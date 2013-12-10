@@ -11,4 +11,7 @@ end
 Motion::Project::App.setup do |app|
   # Use `rake config' to see complete project settings.
   app.name = 'motion-store-kit-sample'
+  app.identifier = "jp.ainame.sk-sample"
+  app.frameworks += ['StoreKit']
+  app.info_plist['UIMainStoryboardFile'] = 'Storyboard'
 end
