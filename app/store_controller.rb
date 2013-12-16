@@ -6,13 +6,6 @@ class StoreController < UIViewController
 
   def viewDidLoad
     super
-    p 'start'
-    p item_label
-    Helu::ProductInfoFetcher.fetch(['item01']) do |item|
-      p item
-      item_label.text = item
-      p 'end'
-    end
   end
 
   def buy
@@ -27,4 +20,37 @@ class StoreController < UIViewController
     alert.show
   end
 
+  BUTTON_OK = 1
+  def alertView(alert_view, clickedButtonAtIndex: button_index)
+    if button_index == BUTTON_OK
+      purchase_process
+    end
+  end
+
+  def purchase_process
+    helu         = Helu.new('item01')
+    helu.fail    = on_fail
+    helu.winning = on_win
+    helu.buy
+    helu.close
+  end
+
+  def on_win
+    lambda do |transaction|
+      show_alert "買った!!買ったよ!!"
+    end
+  end
+
+  def on_fail
+    lambda do |transaction|
+      show_alert "買えなかったよorz..."
+    end
+  end
+
+  def show_alert message
+    UIAlertView.new.tap do |a|
+      a.message = message
+      a.addButtonWithTitle("OK")
+    end.show
+  end
 end
